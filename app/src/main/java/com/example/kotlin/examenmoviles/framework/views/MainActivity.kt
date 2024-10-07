@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.kotlin.examenmoviles.data.DGBallRepository
 import com.example.kotlin.examenmoviles.databinding.ActivityMainBinding
 import com.example.kotlin.examenmoviles.framework.adapters.CharacterAdapter
 import com.example.kotlin.examenmoviles.framework.viewmodel.MainViewModel
@@ -14,13 +16,23 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var characterAdapter: CharacterAdapter
-    private val viewModel: MainViewModel by viewModels()
+    private lateinit var viewModel: MainViewModel
+    val repository = DGBallRepository()  // Asegúrate de tener un constructor sin parámetros o inicialización adecuada
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         initializeBinding()
         setupRecyclerView()
+
+        // Crear el repositorio que necesitas para el ViewModel
+        val repository = DGBallRepository()
+        val viewModelFactory = ViewModelFactory(repository)
+
+        // Inicializar el ViewModel usando el ViewModelFactory
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MainViewModel::class.java)
+
         initializeObservers()
         initializeListeners()
 
@@ -34,10 +46,13 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
+        // Inicializar el adaptador
         characterAdapter = CharacterAdapter(mutableListOf()) { character ->
             // Acción al hacer clic en un personaje, por ejemplo, mostrar detalles
+            Toast.makeText(this, "Clicked on: ${character.name}", Toast.LENGTH_SHORT).show()
         }
 
+        // Configurar el RecyclerView
         binding.recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = characterAdapter
@@ -54,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
 
     private fun initializeObservers() {
         // Observar los personajes desde el ViewModel y actualizar el RecyclerView
