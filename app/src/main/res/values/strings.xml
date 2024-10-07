@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">ExamenMoviles</string>
     <string name="Title">Title</string>
+    <string name="character_image_desc">des</string>
 </resources>
