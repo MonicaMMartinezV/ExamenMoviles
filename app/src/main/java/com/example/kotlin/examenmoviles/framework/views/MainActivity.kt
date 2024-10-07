@@ -17,9 +17,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var characterAdapter: CharacterAdapter
     private lateinit var viewModel: MainViewModel
-    val repository = DGBallRepository()  // Asegúrate de tener un constructor sin parámetros o inicialización adecuada
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -39,6 +36,7 @@ class MainActivity : AppCompatActivity() {
         // Llamar al ViewModel para obtener los personajes de la primera página
         viewModel.fetchCharacters(1, 10)
     }
+
 
     private fun initializeBinding() {
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -69,6 +67,8 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    val repository = DGBallRepository()  // Asegúrate de tener un constructor sin parámetros o inicialización adecuada
 
 
     private fun initializeObservers() {
@@ -103,10 +103,14 @@ class MainActivity : AppCompatActivity() {
             }
             override fun onQueryTextChange(newText: String?): Boolean {
                 newText?.let {
-                    viewModel.filterCharacters(it)
+                    if (it.isNotEmpty()) {
+                        viewModel.filterCharacters(it)
+                    } else {
+                        // Si la búsqueda está vacía, volvemos a cargar los personajes de la primera página
+                        viewModel.fetchCharacters(1, 10)
+                    }
                 }
                 return true
-            }
+                }
         })
-    }
-}
+}}

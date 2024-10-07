@@ -8,6 +8,18 @@ import retrofit2.converter.gson.GsonConverterFactory
 class DGBallAPIClient {
     private lateinit var api: DGBallAPIService
 
+    init {
+        initializeAPI()
+    }
+
+    private fun initializeAPI() {
+        val retrofit = Retrofit.Builder()
+            .baseUrl("https://dragonball-api.com/api/")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+
+        api = retrofit.create(DGBallAPIService::class.java)}
+
     // Función suspendida para obtener todos los personajes
     suspend fun getAllCharacters(page: Int = 1, limit: Int = 10): CharacterObject? {
         return try {

@@ -17,7 +17,7 @@ class CharacterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
     fun bind(character: CharacterBase) {
         // Vinculamos los datos del personaje a las vistas del layout
         characterName.text = character.name
-        characterSpecies.text = character.species
+        characterSpecies.text = character.description
 
         // Cargamos la imagen del personaje usando Glide
         Glide.with(itemView.context)
